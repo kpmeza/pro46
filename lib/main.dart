@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pro46/api/consualbum.dart';
+import 'package:pro46/api/consulta.dart';
 
 void main(List<String> args) {
   runApp(inicio());
@@ -30,7 +32,7 @@ class _principalState extends State<principal> {
         title: Text('Mi app'),
       ),
       drawer: Drawer(
-        child: Column(
+        child: ListView(
           children: [
             DrawerHeader(
                 child: UserAccountsDrawerHeader(
@@ -39,16 +41,65 @@ class _principalState extends State<principal> {
             ListTile(
               title: Text('Inicio'),
               leading: Icon(Icons.home),
+              onTap: () {
+                Navigator.pop(context);
+              },
             ),
             Divider(),
             ListTile(
               title: Text('Medicamentos'),
               leading: Icon(Icons.medical_information_rounded),
+              onTap: () {
+                Buscapost().then((r) {
+                  showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) {
+                        return Scaffold(
+                          appBar: AppBar(
+                            title: Text("API Post"),
+                          ),
+                          body: ListView.builder(
+                            itemCount: r.length,
+                            itemBuilder: (BuildContext context, int i) {
+                              return ListTile(
+                                title: Text(r[i].title),
+                                leading: Text(r[i].id.toString()),
+                              );
+                            },
+                          ),
+                        );
+                      });
+                });
+              },
             ),
             Divider(),
             ListTile(
               title: Text('Salud'),
               leading: Icon(Icons.home),
+              onTap: () {
+                Buscalbum().then((t) {
+                  showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) {
+                        return Scaffold(
+                          appBar: AppBar(
+                            title: Text("API Albums"),
+                          ),
+                          body: ListView.builder(
+                            itemCount: t.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ListTile(
+                                title: Text(t[index].title),
+                                trailing: Text(t[index].id.toString()),
+                              );
+                            },
+                          ),
+                        );
+                      });
+                });
+              },
             ),
             Divider(),
             ListTile(
